@@ -25,9 +25,9 @@ body {
 
 /* Header styles */
 header {
-  background-color: #333;
+  /* background-color: #333;
   color: #fff;
-  padding: 10px 0;
+  padding: 10px 0; */
 }
 
 header #top-header {
@@ -38,13 +38,13 @@ header #top-header {
 }
 
 header .siteName a {
-  color: #fff;
+  color: #333;
   font-size: 1.5em;
   text-decoration: none;
 }
 
 header #tools a {
-  color: #fff;
+  color: #333;
   text-decoration: none;
 }
 
@@ -53,8 +53,8 @@ nav ul {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: center;
-  background-color: #444;
+  justify-content: space-around;
+  background-color: black;
   margin: 0;
 }
 
