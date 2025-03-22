@@ -1,7 +1,5 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
+/* Change Box Model */
+*, *:before, *:after {
   box-sizing: border-box;
 }
 
@@ -11,8 +9,20 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.6;
+  background: url('/images/site/checkerboard.jpg') repeat;
 }
 
+/* Container for the content */
+.container {
+  background-color: #fff;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styles */
 header {
   background-color: #333;
   color: #fff;
@@ -37,6 +47,7 @@ header #tools a {
   text-decoration: none;
 }
 
+/* Navigation */
 nav ul {
   list-style: none;
   padding: 0;
@@ -48,13 +59,18 @@ nav ul {
 
 nav ul li {
   margin: 0 15px;
-  color: #fff;
 }
 
-nav ul li:hover {
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav ul li:hover a {
   text-decoration: underline;
 }
 
+/* Footer styles */
 footer {
   background-color: #333;
   color: #fff;
@@ -62,9 +78,26 @@ footer {
   padding: 10px 0;
 }
 
+/* Main content */
 main {
   padding: 20px;
+}
+
+/* Welcome Section */
+#welcome {
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.cta-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.text-content {
+  max-width: 400px;
 }
 
 button {
@@ -84,20 +117,40 @@ img {
   height: auto;
 }
 
-/* Checkered border for header and footer */
-header, footer {
-  border: 10px solid transparent;
-  border-image: url('../images/site/checkerboard.jpg') 30;
+/* Layout for Upgrades and Reviews */
+#content-sections {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-/* Media Queries */
+#upgrades, #reviews {
+  flex: 1;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+#upgrades a {
+  color: #FFD700;
+}
+
+/* Upgrades Section with Blue Background on Images */
+.grid div img {
+  background-color: rgb(3, 175, 175);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.grid div {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* Responsive design */
 @media screen and (min-width: 768px) {
-  main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  img {
+  .cta-section img {
     max-width: 50%;
   }
 }
