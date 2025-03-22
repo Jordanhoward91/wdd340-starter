@@ -133,15 +133,39 @@ img {
   border-radius: 12px;
 }
 
+/* Layout for Upgrades Section with a 2x2 Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
+  grid-template-rows: repeat(2, auto); /* Creates 2 rows based on content height */
+}
+
+.grid div {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.grid div img {
+  max-width: 100%; /* Ensures the image is responsive */
+  height: auto;
+  display: block;
+  margin-bottom: 10px; /* Space between image and link */
+}
+
+
 #upgrades a {
   color: #0056b3;
 }
 
 /* Upgrades Section with Blue Background on Images */
 .grid div img {
-  background-color: rgb(3, 175, 175);
-  padding: 10px;
-  border-radius: 8px;
+    background-color: rgb(3, 175, 175);
+    padding: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    /* border-radius: 8px; */
 }
 
 .grid div {
