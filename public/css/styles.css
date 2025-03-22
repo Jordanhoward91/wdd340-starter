@@ -94,10 +94,7 @@ main {
 
 .text-content {
   background-color: rgb(236 242 242 / 30%);
-  padding: 20px;
   color: rgb(3, 175, 175);
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 400px;
 }
 
@@ -138,6 +135,7 @@ img {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
   grid-template-rows: repeat(2, auto); /* Creates 2 rows based on content height */
+  gap: 20px; /* Space between grid items */
 }
 
 .grid div {
@@ -145,6 +143,10 @@ img {
   padding: 15px;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
+  justify-content: center; /* Centers content vertically */
 }
 
 .grid div img {
@@ -154,24 +156,19 @@ img {
   margin-bottom: 10px; /* Space between image and link */
 }
 
-
-#upgrades a {
+.grid div a {
   color: #0056b3;
+  font-size: 1.2em; /* Optional: Adjust font size */
+  margin-top: 10px; /* Adds some space between the image and the link */
 }
 
 /* Upgrades Section with Blue Background on Images */
 .grid div img {
-    background-color: rgb(3, 175, 175);
-    padding: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
-    /* border-radius: 8px; */
-}
-
-.grid div {
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 15px;
-  border-radius: 8px;
+  background-color: rgb(3, 175, 175);
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  /* border-radius: 8px; */
 }
 
 /* Responsive design */
