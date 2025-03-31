@@ -40,4 +40,9 @@ exports.getVehicleById = async (invId) => {
 
 
 
-module.exports = {getClassifications}
+module.exports = {
+  getClassifications,
+  getInventoryByClassificationId,  // <-- Add this line
+  getVehicleById
+};
+
