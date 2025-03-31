@@ -21,28 +21,31 @@ async function getInventoryByClassificationId(classification_id) {
     )
     return data.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("getInventoryByClassificationId error " + error)
   }
 }
 
-const db = require('../database/index');
-
-exports.getVehicleById = async (invId) => {
+/* ***************************
+ *  Get vehicle details by ID
+ * ************************** */
+async function getVehicleById(invId) {
   try {
-    const result = await db.query('SELECT * FROM inventory WHERE inv_id = $1', [invId]);
-    return result.rows[0];
+    const result = await pool.query(
+      'SELECT * FROM public.inventory WHERE inv_id = $1',
+      [invId]
+    )
+    return result.rows[0]
   } catch (error) {
-    console.error("Database Error: ", error);
-    throw error;
+    console.error("Database Error: ", error)
+    throw error
   }
-};
+}
 
-
-
-
+/* ***************************
+ *  Export functions
+ * ************************** */
 module.exports = {
   getClassifications,
-  getInventoryByClassificationId,  // <-- Add this line
-  getVehicleById
+  getInventoryByClassificationId,
+  getVehicleById  // Now all functions are consistently defined before export
 };
-
