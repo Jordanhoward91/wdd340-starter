@@ -13,14 +13,15 @@ const env = require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
-const inventoryRoute = require("./routes/inventoryRoute");
+const inventoryRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute") // Added account route require statement
 const session = require("express-session")
 const pool = require('./database/')
 
 
 /* ***********************
  * Middleware
- * ************************/
+ *************************/
  app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -59,6 +60,9 @@ app.get("/", baseController.buildHome)
 
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+// Account routes
+app.use("/account", accountRoute) // Added account route using inventory route structure
 
 
 /* ***********************
