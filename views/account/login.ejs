@@ -4,19 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css"> <!-- Include your CSS file -->
+  <link rel="stylesheet" href="/css/styles.css"> <!-- Reference your CSS -->
 </head>
 <body>
   <header>
-    <nav>
-      <%= nav %> <!-- Navigation content dynamically generated from utilities -->
-    </nav>
+    <nav><%= nav %></nav>
   </header>
   <main>
     <h1><%= title %></h1>
     
-    <!-- Display Flash Message -->
-    <% if (messages && messages.length > 0) { %>
+    <!-- Flash Messages -->
+    <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
       <div class="flash-message">
         <% messages.forEach(function(message) { %>
           <p><%= message %></p>
@@ -26,17 +24,16 @@
 
     <!-- Login Form -->
     <form action="/account/login" method="POST">
-      <label for="email">Email:</label>
+      <label for="email">Email Address:</label>
       <input type="email" id="email" name="email" required>
-      
+
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-      
+
       <button type="submit">Login</button>
-	  <p>If you don't have an account, <a href="/account/register">register here</a>.</p>
+	  <p>If you don't have an account, <a href="/account/register">Register here</a>.</p>
     </form>
-    
-    <!-- Link to Registration Page -->
+
   </main>
 </body>
 </html>
