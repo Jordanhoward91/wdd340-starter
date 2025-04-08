@@ -1,15 +1,17 @@
-// Require the utilities module
-const utilities = require('../utilities'); // Adjust the path if necessary
+const utilities = require('../utilities'); // Required module for utilities
 
 // ****************************************
 //  Deliver login view
 // ****************************************
 async function buildLogin(req, res, next) {
-  let nav = await utilities.getNav(); // Fetch navigation bar content
-  res.render("account/login", { // Render the login view
+  let nav = await utilities.getNav();
+  let messages = req.flash('info'); // Fetch flash messages (if using connect-flash)
+  res.render("account/login", {
     title: "Login",
     nav,
+    messages, // Ensure messages is passed as an array
   });
 }
+
 
 module.exports = { buildLogin };
