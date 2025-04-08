@@ -13,5 +13,11 @@ router.get('/my-account',
   }
 );
 
+// Route to build login view
+router.get('/login', utilities.handleErrors(accountsController.buildLogin));
+
+// Route to build registration view
+router.get('/register', utilities.handleErrors(accountsController.buildRegister));
+
 // Export the router for use in other files
 module.exports = router;

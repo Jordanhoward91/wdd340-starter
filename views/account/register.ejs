@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css"> <!-- Reference your CSS -->
+</head>
+<body>
+  <header>
+    <nav><%= nav %></nav>
+  </header>
+  <main>
+    <h1><%= title %></h1>
+    
+    <!-- Flash Messages -->
+    <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+      <div class="flash-message">
+        <% messages.forEach(function(message) { %>
+          <p><%= message %></p>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Registration Form -->
+    <form action="/account/register" method="POST">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required>
+
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required>
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <small>Password must be at least 12 characters long, contain 1 uppercase letter, 1 number, and 1 special character.</small>
+
+      <button type="submit">Register</button>
+    </form>
+  </main>
+</body>
+</html>

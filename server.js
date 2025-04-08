@@ -65,6 +65,7 @@ app.use("/inv", inventoryRoute)
 app.use("/account", accountRoute) // Added account route using inventory route structure
 
 
+
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file
