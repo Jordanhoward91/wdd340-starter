@@ -347,6 +347,37 @@ h1.header {
   font-size: 16px;
 }
 
+/* Ensure full height for the page */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Full viewport height */
+  display: flex;
+  flex-direction: column; /* Stack header, main, and footer vertically */
+}
+
+/* Wrapper fills the height, ensuring proper layout */
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; /* Ensures the wrapper takes the full height of the viewport */
+}
+
+/* Main content stretches to fill available space */
+main {
+  flex: 1; /* Allows the main content to grow and push footer down */
+  padding: 20px; /* Optional padding for main content */
+}
+
+/* Footer styles */
+footer {
+  background-color: #333; /* Footer background color */
+  color: white; /* Footer text color */
+  text-align: center; /* Center-align text */
+  padding: 10px 0; /* Padding inside footer */
+  border-top: 1px solid #ddd; /* Optional border for separation */
+}
+
 
 
 /* Responsive design */
