@@ -296,6 +296,14 @@ small {
   color: #666;
 }
 
+h1.header {
+  text-align: center; /* Centers the text horizontally */
+  margin-bottom: 20px; /* Adds space below the header */
+  font-size: 2rem; /* Adjust font size */
+  font-weight: bold; /* Make the text bold */
+  color: #333; /* Set text color */
+}
+
 
 /* Responsive design */
 @media screen and (min-width: 768px) {
