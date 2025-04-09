@@ -304,6 +304,50 @@ h1.header {
   color: #333; /* Set text color */
 }
 
+/* Card Container */
+.card {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff; /* White background for the card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  text-align: center; /* Center-align content */
+  border: 1px solid #ddd; /* Optional border */
+}
+
+/* Buttons */
+.button {
+  display: inline-block; /* Display as a block but not full width */
+  padding: 10px 20px; /* Padding inside the button */
+  margin: 10px; /* Space between buttons */
+  color: #fff; /* Text color */
+  background-color: rgb(3, 175, 175); /* Button background */
+  text-decoration: none; /* Remove underline from links */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Text size */
+  font-weight: bold; /* Bold text */
+  border: none; /* Remove default border */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Button Hover Effect */
+.button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Dropdown Styling */
+#classificationList {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+
 
 /* Responsive design */
 @media screen and (min-width: 768px) {

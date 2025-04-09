@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+	<main>
+	<!-- <h1>Inventory Management</h1> -->
+	
+	<!-- Flash Messages -->
+	<% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+		<div class="flash-message">
+		<% messages.forEach(function(message) { %>
+			<p><%= message %></p>
+		<% }); %>
+		</div>
+	<% } %>
+
+	<!-- Card Container -->
+	<div class="card">
+		<h2>Manage Inventory</h2>
+		<p>
+		<a href="/inv/add-classification" class="button">Add New Classification</a>
+		</p>
+		<p>
+		<a href="/inv/add-inventory" class="button">Add New Inventory Item</a>
+		</p>
+	</div>
+	</main>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New Inventory Item</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+	  
+	  <!-- Flash Messages -->
+	  <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+		<div class="flash-message">
+			<% messages.forEach(function(message) { %>
+				<p><%= message %></p>
+				<% }); %>
+			</div>
+			<% } %>
+			
+			<!-- Add Inventory Form -->
+		<form action="/inv/add-inventory" method="POST">
+		<h1>Add New Inventory Item</h1>
+      <label for="classificationList">Classification:</label>
+      <!-- Dynamically Rendered Dropdown -->
+      <%= classificationList %>
+
+      <label for="invMake">Make:</label>
+      <input type="text" id="invMake" name="invMake" value="<%= invMake %>" required>
+
+      <label for="invModel">Model:</label>
+      <input type="text" id="invModel" name="invModel" value="<%= invModel %>" required>
+
+      <label for="invDescription">Description:</label>
+      <textarea id="invDescription" name="invDescription" required><%= invDescription %></textarea>
+
+      <label for="invImagePath">Image Path:</label>
+      <input type="text" id="invImagePath" name="invImagePath" value="<%= invImagePath %>" required>
+
+      <label for="invThumbnailPath">Thumbnail Path:</label>
+      <input type="text" id="invThumbnailPath" name="invThumbnailPath" value="<%= invThumbnailPath %>" required>
+
+      <label for="invPrice">Price:</label>
+      <input type="number" id="invPrice" name="invPrice" value="<%= invPrice %>" required>
+
+      <label for="invMiles">Miles:</label>
+      <input type="number" id="invMiles" name="invMiles" value="<%= invMiles %>" required>
+
+      <label for="invColor">Color:</label>
+      <input type="text" id="invColor" name="invColor" value="<%= invColor %>" required>
+
+      <button type="submit">Add Vehicle</button>
+    </form>
+  </main>
+</body>
+</html>

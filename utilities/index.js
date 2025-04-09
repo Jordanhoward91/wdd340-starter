@@ -78,6 +78,26 @@ Util.buildClassificationGrid = async function (data) {
 };
 
 /* ******************************
+ * Build the classification dropdown list
+ ****************************** */
+Util.buildClassificationList = async function (classification_id = null) {
+  let data = await invModel.getClassifications(); // Fetch all classifications
+  let classificationList =
+    '<select name="classification_id" id="classificationList" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
+  data.rows.forEach((row) => {
+    classificationList += `<option value="${row.classification_id}"`;
+    if (classification_id && row.classification_id == classification_id) {
+      classificationList += " selected";
+    }
+    classificationList += `>${row.classification_name}</option>`;
+  });
+  classificationList += "</select>";
+  return classificationList;
+};
+
+
+/* ******************************
  * Handle errors in asynchronous route handlers
  ******************************* */
 function handleErrors(fn) {
@@ -92,5 +112,6 @@ function handleErrors(fn) {
 module.exports = {
   getNav: Util.getNav,
   buildClassificationGrid: Util.buildClassificationGrid,
+  buildClassificationList: Util.buildClassificationList, // Export added function
   handleErrors,
 };

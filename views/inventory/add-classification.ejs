@@ -1,0 +1,29 @@
+<main>
+  <!-- <h1>Add New Classification</h1> -->
+  
+  <!-- Flash Messages -->
+  <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+    <div class="flash-message">
+      <% messages.forEach(function(message) { %>
+        <!-- <p><%= message %></p> -->
+      <% }); %>
+    </div>
+  <% } %>
+
+  <form action="/inv/add-classification" method="POST" onsubmit="validateClassificationForm(event)">
+    <label for="classificationName">Classification Name:</label>
+    <input type="text" id="classificationName" name="classificationName" required>
+    <button type="submit">Add Classification</button>
+  </form>
+
+  <!-- Card Container -->
+  <div class="card">
+    <h2>Manage Inventory</h2>
+    <p>
+      <a href="/inv/add-classification" class="button">Add New Classification</a>
+    </p>
+    <p>
+      <a href="/inv/add-inventory" class="button">Add New Inventory Item</a>
+    </p>
+  </div>
+</main>
