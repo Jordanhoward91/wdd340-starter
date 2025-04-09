@@ -17,12 +17,13 @@ const inventoryRoute = require("./routes/inventoryRoute")
 const accountRoute = require("./routes/accountRoute") // Added account route require statement
 const session = require("express-session")
 const pool = require('./database/')
+const bodyParser = require("body-parser") // Added body-parser
 
 
 /* ***********************
  * Middleware
  *************************/
- app.use(session({
+app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
     pool,
@@ -33,7 +34,6 @@ const pool = require('./database/')
   name: 'sessionId',
 }))
 
-
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){
@@ -41,6 +41,9 @@ app.use(function(req, res, next){
   next()
 })
 
+// Body-parser Middleware
+app.use(bodyParser.json()) // For parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // For parsing application/x-www-form-urlencoded
 
 
 /* ***********************
@@ -63,7 +66,6 @@ app.use("/inv", inventoryRoute)
 
 // Account routes
 app.use("/account", accountRoute) // Added account route using inventory route structure
-
 
 
 /* ***********************
