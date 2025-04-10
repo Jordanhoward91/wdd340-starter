@@ -96,6 +96,84 @@ invCont.addClassification = async function (req, res, next) {
 };
 
 /* ***************************
+ *  Build add inventory view
+ * ************************** */
+invCont.buildAddInventoryView = async function (req, res, next) {
+  console.log("Rendering add-inventory view...");
+  try {
+    const nav = await utilities.getNav();
+    const classificationList = await utilities.buildClassificationList(); // Dynamically build dropdown list
+    res.render("inventory/add-inventory", {
+      title: "Add New Inventory Item",
+      nav,
+      classificationList,
+      invMake: "",
+      invModel: "",
+      invDescription: "",
+      invImagePath: "",
+      invThumbnailPath: "",
+      invPrice: "",
+      invMiles: "",
+      invColor: "",
+      invYear: "",
+      messages: req.flash("notice"),
+    });
+    console.log("Successfully rendered add-inventory view.");
+  } catch (error) {
+    console.error("Error in buildAddInventoryView:", error);
+    next(error);
+  }
+};
+
+/* ***************************
+ *  Process add inventory item
+ * ************************** */
+invCont.addInventoryItem = async function (req, res, next) {
+  console.log("Processing addInventoryItem with req.body:", req.body); // Debug incoming request data
+  try {
+    const { classification_id, invMake, invModel, invDescription, invImagePath, invThumbnailPath, invPrice, invMiles, invColor, invYear } = req.body;
+
+    const result = await invModel.addInventoryItem(
+      classification_id,
+      invMake,
+      invModel,
+      invDescription,
+      invImagePath,
+      invThumbnailPath,
+      invPrice,
+      invMiles,
+      invColor,
+      invYear
+    );
+
+    if (result.rowCount > 0) {
+      req.flash("notice", `Successfully added new inventory item: ${invMake} ${invModel}`);
+      res.redirect("/inv"); // Redirect to inventory management
+    } else {
+      req.flash("notice", "Failed to add inventory item.");
+      res.status(500).render("inventory/add-inventory", {
+        title: "Add New Inventory Item",
+        nav: await utilities.getNav(),
+        classificationList: await utilities.buildClassificationList(),
+        invMake,
+        invModel,
+        invDescription,
+        invImagePath,
+        invThumbnailPath,
+        invPrice,
+        invMiles,
+        invColor,
+        invYear,
+        messages: req.flash("notice"),
+      });
+    }
+  } catch (error) {
+    console.error("Error in addInventoryItem:", error);
+    next(error);
+  }
+};
+
+/* ***************************
  *  Export controller functions
  * ************************** */
 module.exports = invCont;
