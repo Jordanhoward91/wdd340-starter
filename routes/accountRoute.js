@@ -22,5 +22,8 @@ router.get('/register', utilities.handleErrors(accountsController.buildRegister)
 // Route to handle registration form submission
 router.post('/register', utilities.handleErrors(accountsController.registerAccount));
 
+router.post('/login', utilities.handleErrors(accountsController.processLogin));
+
+
 // Export the router for use in other files
 module.exports = router;
