@@ -8,22 +8,22 @@
 </head>
 <body>
   <main>
-	  
-	  <!-- Flash Messages -->
-	  <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
-		<div class="flash-message">
-			<% messages.forEach(function(message) { %>
-				<p><%= message %></p>
-				<% }); %>
-			</div>
-			<% } %>
-			
-			<!-- Add Inventory Form -->
-		<form action="/inv/add-inventory" method="POST">
-		<h1>Add New Inventory Item</h1>
+    <!-- Flash Messages -->
+    <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+      <div class="flash-message">
+        <% messages.forEach(function(message) { %>
+          <p><%= message %></p>
+        <% }); %>
+      </div>
+    <% } %>
+      
+    <!-- Add Inventory Form -->
+    <form action="/inv/add-inventory" method="POST">
+      <h1>Add New Inventory Item</h1>
+      
       <label for="classificationList">Classification:</label>
       <!-- Dynamically Rendered Dropdown -->
-      <%= classificationList %>
+      <%- classificationList %>
 
       <label for="invMake">Make:</label>
       <input type="text" id="invMake" name="invMake" value="<%= invMake %>" required>
@@ -48,6 +48,9 @@
 
       <label for="invColor">Color:</label>
       <input type="text" id="invColor" name="invColor" value="<%= invColor %>" required>
+
+      <label for="invYear">Year:</label>
+      <input type="number" id="invYear" name="invYear" value="<%= invYear %>" required>
 
       <button type="submit">Add Vehicle</button>
     </form>

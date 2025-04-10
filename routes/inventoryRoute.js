@@ -26,6 +26,8 @@ router.get('/add-inventory', utilities.handleErrors(invController.buildAddInvent
 // Route to process the add inventory form
 router.get('/add-inventory', utilities.handleErrors(invController.buildAddInventoryView));
 
+router.post('/add-inventory', utilities.handleErrors(invController.addInventoryItem));
+
 
 // Route to display delete confirmation view
 router.get('/delete/:inv_id', utilities.handleErrors(invController.buildDeleteView));

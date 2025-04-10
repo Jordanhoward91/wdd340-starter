@@ -17,7 +17,8 @@ invCont.buildByClassificationId = async function (req, res, next) {
 
     if (!data || data.length === 0) {
       console.log("No vehicles found for classification ID:", classification_id);
-      return res.status(404).send("No vehicles found for this classification.");
+      req.flash("notice", "No vehicles found for this classification.");
+      return res.status(404).redirect("/inv");
     }
 
     const grid = await utilities.buildClassificationGrid(data); // Build classification grid
@@ -61,13 +62,16 @@ invCont.buildManagementView = async function (req, res, next) {
 invCont.buildAddInventoryView = async function (req, res, next) {
   console.log("Rendering add inventory view...");
   try {
-    const nav = await utilities.getNav(); // Build dynamic navigation
-    const classificationList = await utilities.buildClassificationList(); // Generate classification dropdown
+    const nav = await utilities.getNav(); // Build navigation dynamically
+    const classificationList = await utilities.buildClassificationList(); // Generate dropdown list
+    
+    // Debugging the dropdown content
+    console.log("Generated classificationList HTML:", classificationList);
 
     res.render("inventory/add-inventory", {
       title: "Add New Inventory Item",
       nav,
-      classificationList, // Dropdown data for classification selection
+      classificationList, // Pass dropdown list to the view
       invMake: "",
       invModel: "",
       invDescription: "",
@@ -76,6 +80,7 @@ invCont.buildAddInventoryView = async function (req, res, next) {
       invPrice: "",
       invMiles: "",
       invColor: "",
+      invYear: "",
       messages: req.flash("notice"),
     });
     console.log("Successfully rendered add inventory view.");
@@ -84,6 +89,7 @@ invCont.buildAddInventoryView = async function (req, res, next) {
     next(error);
   }
 };
+
 
 /* ***************************
  *  Process add inventory form
@@ -101,6 +107,7 @@ invCont.addInventoryItem = async function (req, res, next) {
       invPrice,
       invMiles,
       invColor,
+      invYear, // Ensure invYear is destructured
     } = req.body;
 
     console.log("Calling invModel.addInventoryItem...");
@@ -113,17 +120,14 @@ invCont.addInventoryItem = async function (req, res, next) {
       invThumbnailPath,
       invPrice,
       invMiles,
-      invColor
+      invColor,
+      invYear // Ensure invYear is passed to the model
     );
     console.log("addInventoryItem result:", result);
 
     if (result.rowCount > 0) {
       req.flash("notice", `Successfully added new inventory item: ${invMake} ${model}`);
-      res.status(201).render("inventory/management", {
-        title: "Inventory Management",
-        nav: await utilities.getNav(),
-        messages: req.flash("notice"),
-      });
+      res.status(201).redirect("/inv"); // Redirect to inventory management
     } else {
       req.flash("notice", "Failed to add inventory item");
       res.status(500).render("inventory/add-inventory", {
@@ -138,6 +142,7 @@ invCont.addInventoryItem = async function (req, res, next) {
         invPrice,
         invMiles,
         invColor,
+        invYear,
         messages: req.flash("notice"),
       });
     }
@@ -158,7 +163,8 @@ invCont.getInventoryDetail = async function (req, res, next) {
 
     if (!vehicle) {
       console.log("No vehicle found for inv_id:", invId);
-      return res.status(404).send("Vehicle not found.");
+      req.flash("notice", "Vehicle not found.");
+      return res.status(404).redirect("/inv");
     }
 
     res.render("inventory/detail", { vehicle });

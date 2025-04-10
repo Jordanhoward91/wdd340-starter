@@ -1,32 +1,38 @@
 const invModel = require("../models/inventory-model"); // Import inventory model
+
 const Util = {};
 
 /* ************************
- * Constructs the nav HTML unordered list
+ * Constructs the navigation HTML unordered list
  ************************** */
 Util.getNav = async function () {
-  let data = await invModel.getClassifications(); // Fetch classifications from the database
-  let list = "<ul>";
-  list += '<li><a href="/" title="Home page">Home</a></li>';
-  data.rows.forEach((row) => {
-    list += "<li>";
-    list +=
-      '<a href="/inv/type/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>";
-    list += "</li>";
-  });
-  list += "</ul>";
-  return list;
+  try {
+    const data = await invModel.getClassifications(); // Fetch classifications from the database
+    let list = "<ul>";
+    list += '<li><a href="/" title="Home page">Home</a></li>';
+    data.rows.forEach((row) => {
+      list += "<li>";
+      list +=
+        '<a href="/inv/type/' +
+        row.classification_id +
+        '" title="See our inventory of ' +
+        row.classification_name +
+        ' vehicles">' +
+        row.classification_name +
+        "</a>";
+      list += "</li>";
+    });
+    list += "</ul>";
+    return list;
+  } catch (error) {
+    console.error("Error in getNav:", error); // Log any errors in navigation creation
+    throw error;
+  }
 };
 
 /* **************************************
- * Build the classification view HTML
- * ************************************ */
+ * Build the classification view grid HTML
+ ************************************** */
 Util.buildClassificationGrid = async function (data) {
   let grid = ""; // Initialize grid
   if (data.length > 0) {
@@ -81,25 +87,38 @@ Util.buildClassificationGrid = async function (data) {
  * Build the classification dropdown list
  ****************************** */
 Util.buildClassificationList = async function (classification_id = null) {
-  let data = await invModel.getClassifications(); // Fetch all classifications
-  let classificationList =
-    '<select name="classification_id" id="classificationList" required>';
-  classificationList += "<option value=''>Choose a Classification</option>";
-  data.rows.forEach((row) => {
-    classificationList += `<option value="${row.classification_id}"`;
-    if (classification_id && row.classification_id == classification_id) {
-      classificationList += " selected";
-    }
-    classificationList += `>${row.classification_name}</option>`;
-  });
-  classificationList += "</select>";
-  return classificationList;
-};
+  try {
+    const data = await invModel.getClassifications(); // Fetch all classifications
+    console.log("Fetched classifications from DB:", data.rows); // Debug fetched data
 
+    const uniqueClassifications = data.rows.reduce((acc, current) => {
+      if (!acc.some((item) => item.classification_id === current.classification_id)) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
+    let classificationList =
+      '<select name="classification_id" id="classificationList" required>';
+    classificationList += "<option value=''>Choose a Classification</option>";
+    uniqueClassifications.forEach((row) => {
+      classificationList += `<option value="${row.classification_id}"`;
+      if (classification_id && row.classification_id == classification_id) {
+        classificationList += " selected";
+      }
+      classificationList += `>${row.classification_name}</option>`;
+    });
+    classificationList += "</select>";
+    return classificationList;
+  } catch (error) {
+    console.error("Error in buildClassificationList:", error); // Log errors for debugging
+    throw error;
+  }
+};
 
 /* ******************************
  * Handle errors in asynchronous route handlers
- ******************************* */
+ ****************************** */
 function handleErrors(fn) {
   return function (req, res, next) {
     Promise.resolve(fn(req, res, next)).catch(next);
@@ -108,10 +127,10 @@ function handleErrors(fn) {
 
 /* ******************************
  * Export utilities
- ******************************* */
+ ****************************** */
 module.exports = {
   getNav: Util.getNav,
   buildClassificationGrid: Util.buildClassificationGrid,
-  buildClassificationList: Util.buildClassificationList, // Export added function
-  handleErrors,
+  buildClassificationList: Util.buildClassificationList,
+  handleErrors, // Exported error-handling utility
 };
