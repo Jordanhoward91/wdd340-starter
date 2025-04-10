@@ -6,10 +6,10 @@ const utilities = require("../utilities/");
 console.log("invController functions:", Object.keys(invController)); // Debugging to verify functions
 
 // Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
 
 // Route to display inventory item details
-router.get('/inventory/:inv_id', invController.getInventoryDetail);
+router.get('/inventory/:inv_id', utilities.handleErrors(invController.getInventoryDetail));
 
 // Route to display the management view
 router.get('/', utilities.handleErrors(invController.buildManagementView));
@@ -24,10 +24,7 @@ router.post('/add-classification', utilities.handleErrors(invController.addClass
 router.get('/add-inventory', utilities.handleErrors(invController.buildAddInventoryView));
 
 // Route to process the add inventory form
-router.get('/add-inventory', utilities.handleErrors(invController.buildAddInventoryView));
-
 router.post('/add-inventory', utilities.handleErrors(invController.addInventoryItem));
-
 
 // Route to display delete confirmation view
 router.get('/delete/:inv_id', utilities.handleErrors(invController.buildDeleteView));
