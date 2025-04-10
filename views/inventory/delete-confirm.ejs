@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+    <!-- Flash Messages -->
+    <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+      <div class="flash-message">
+        <% messages.forEach(function(message) { %>
+          <p><%= message %></p>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Delete Confirmation Form -->
+    <form action="/inv/delete" method="POST">
+      <h1>Confirm Deletion</h1>
+      <p>Confirm deletion - The delete is permanent.</p>
+      
+      <label for="make">Make:</label>
+      <input type="text" id="make" name="make" value="<%= inv.make %>" readonly>
+
+      <label for="model">Model:</label>
+      <input type="text" id="model" name="model" value="<%= inv.model %>" readonly>
+
+      <label for="year">Year:</label>
+      <input type="text" id="year" name="year" value="<%= inv.year %>" readonly>
+
+      <label for="price">Price:</label>
+      <input type="text" id="price" name="price" value="<%= inv.price %>" readonly>
+
+      <input type="hidden" name="inv_id" value="<%= inv.inv_id %>">
+      
+      <button type="submit">Delete</button>
+    </form>
+  </main>
+</body>
+</html>
