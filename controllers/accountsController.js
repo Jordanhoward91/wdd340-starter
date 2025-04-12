@@ -105,7 +105,15 @@ async function processLogin(req, res, next) {
     console.log("User Data:", user); // Debugging output
 
     if (user) {
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+      // Include account_id and other necessary fields in the JWT payload
+      const payload = {
+        account_id: user.account_id, // Ensure account_id is included
+        firstName: user.firstName,
+        account_type: user.account_type, // Add any other fields as needed
+      };
+      console.log("JWT Payload (processLogin):", payload); // Debugging payload
+
+      const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
       res.cookie("jwt", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 3600000 });
       req.flash("notice", `Welcome back, ${user.firstName}!`);
       res.redirect("/");
@@ -122,7 +130,6 @@ async function processLogin(req, res, next) {
     next(error);
   }
 }
-
 
 /* ****************************************
  *  Account Login (Alternative Implementation)
@@ -145,7 +152,16 @@ async function accountLogin(req, res) {
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600000 });
+
+      // Include account_id and other necessary fields in the JWT payload
+      const payload = {
+        account_id: accountData.account_id, // Ensure account_id is included
+        firstName: accountData.firstName,
+        account_type: accountData.account_type, // Add any other fields as needed
+      };
+      console.log("JWT Payload (accountLogin):", payload); // Debugging payload
+
+      const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600000 });
       res.redirect("/"); // Redirect to home page
     } else {

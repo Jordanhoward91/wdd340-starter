@@ -14,12 +14,13 @@ const app = express();
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
-const accountRoute = require("./routes/accountRoute"); // Added account route require statement
+const accountRoute = require("./routes/accountRoute");
+const favoritesRoute = require("./routes/favoritesRoute"); // Added favorites route require statement
 const session = require("express-session");
 const pool = require('./database/');
-const bodyParser = require("body-parser"); // Added body-parser
-const cookieParser = require("cookie-parser")
-const utilities = require("./utilities")
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const utilities = require("./utilities");
 
 /* ***********************
  * Middleware
@@ -45,10 +46,9 @@ app.use(function(req, res, next){
 // Body-parser Middleware
 app.use(bodyParser.json()); // For parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.use(utilities.checkJWTToken)
-
+app.use(utilities.checkJWTToken); // Custom middleware to check for JWT token
 
 
 /* ***********************
@@ -71,7 +71,10 @@ app.get("/", baseController.buildHome);
 app.use("/inv", inventoryRoute);
 
 // Account routes
-app.use("/account", accountRoute); // Added account route using inventory route structure
+app.use("/account", accountRoute);
+
+// Favorites routes
+app.use("/favorites", favoritesRoute); // Added favorites routes
 
 
 /* ***********************
@@ -85,5 +88,5 @@ const host = process.env.HOST;
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`);
+  console.log(`App listening on ${host}:${port}`);
 });

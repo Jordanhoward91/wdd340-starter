@@ -249,3 +249,11 @@ WHERE inv_make = 'GM'
 UPDATE inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
 	inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+-- favorites table
+CREATE TABLE favorites (
+	favorite_id SERIAL PRIMARY KEY,
+	account_id INT NOT NULL,
+	item_id INT NOT NULL,
+	FOREIGN KEY (account_id) REFERENCES account (account_id) ON DELETE CASCADE,
+	FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE
+);

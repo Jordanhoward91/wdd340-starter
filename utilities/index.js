@@ -1,6 +1,6 @@
 const invModel = require("../models/inventory-model"); // Import inventory model
-const jwt = require("jsonwebtoken")
-require("dotenv").config()
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const Util = {};
 
@@ -127,32 +127,38 @@ function handleErrors(fn) {
   };
 }
 
-
-
 /* ****************************************
-* Middleware to check token validity
-**************************************** */
+ * Middleware to check token validity
+ **************************************** */
 Util.checkJWTToken = (req, res, next) => {
- if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
-   function (err, accountData) {
-    if (err) {
-     req.flash("Please log in")
-     res.clearCookie("jwt")
-     return res.redirect("/account/login")
-    }
-    res.locals.accountData = accountData
-    res.locals.loggedin = 1
-    next()
-   })
- } else {
-  next()
- }
-}
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          console.error("JWT verification error:", err); // Debugging the error
+          req.flash("notice", "Please log in");
+          res.clearCookie("jwt");
+          return res.redirect("/account/login");
+        }
 
+        // Debug the decoded token for troubleshooting
+        console.log("Decoded Token (Middleware):", accountData);
 
+        req.user = accountData; // Attach decoded token to req.user
+        console.log("req.user populated in Middleware:", req.user); // Log populated req.user
+
+        res.locals.accountData = accountData; // Make token data available in views
+        res.locals.loggedin = 1; // Set a flag for logged-in status
+        next();
+      }
+    );
+  } else {
+    console.warn("JWT not found in cookies"); // Warn if the JWT is missing
+    next();
+  }
+};
 
 /* ******************************
  * Export utilities

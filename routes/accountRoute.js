@@ -4,6 +4,8 @@ const router = express.Router();
 const utilities = require('../utilities'); // Adjust path as needed
 const accountsController = require('../controllers/accountsController'); // Ensure this path is correct
 const regValidate = require('../validation/regValidate'); // Assuming this path is correct
+const favoritesController = require('../controllers/favoritesController');
+
 
 // Default account route
 router.get('/', utilities.handleErrors(accountsController.accountManagement));
@@ -27,6 +29,15 @@ router.post(
   regValidate.checkLoginData, // Validation middleware
   accountsController.processLogin // Controller function
 );
+
+
+// Favorites
+router.post('/add', utilities.checkJWTToken, favoritesController.addFavorite);
+router.get('/', utilities.checkJWTToken, favoritesController.getFavorites);
+router.post('/remove', utilities.checkJWTToken, favoritesController.removeFavorite);
+
+module.exports = router;
+
 
 
 // Export the router for use in other files
