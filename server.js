@@ -18,7 +18,8 @@ const accountRoute = require("./routes/accountRoute"); // Added account route re
 const session = require("express-session");
 const pool = require('./database/');
 const bodyParser = require("body-parser"); // Added body-parser
-
+const cookieParser = require("cookie-parser")
+const utilities = require("./utilities")
 
 /* ***********************
  * Middleware
@@ -44,6 +45,10 @@ app.use(function(req, res, next){
 // Body-parser Middleware
 app.use(bodyParser.json()); // For parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+app.use(cookieParser())
+
+app.use(utilities.checkJWTToken)
+
 
 
 /* ***********************

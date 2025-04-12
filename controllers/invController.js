@@ -173,6 +173,35 @@ invCont.addInventoryItem = async function (req, res, next) {
   }
 };
 
+invCont.getInventoryDetail = async function (req, res, next) {
+  console.log("Processing getInventoryDetail with req.params:", req.params); // Debug incoming request params
+  try {
+    const invId = req.params.inv_id; // Extract inventory ID from the route parameter
+    const inventoryItem = await invModel.getInventoryById(invId); // Query database for inventory item
+
+    if (!inventoryItem) {
+      console.log("No inventory item found for ID:", invId);
+      req.flash("notice", "No inventory item found.");
+      return res.status(404).redirect("/inv");
+    }
+
+    const nav = await utilities.getNav(); // Build dynamic navigation
+    console.log("Successfully fetched inventory item:", inventoryItem);
+
+    // Render the detail.ejs view with the vehicle's details
+    res.render("detail", {
+      title: `${inventoryItem.inv_make} ${inventoryItem.inv_model}`,
+      nav,
+      vehicle: inventoryItem, // Pass the inventory item to the view
+      messages: req.flash("notice"),
+    });
+  } catch (error) {
+    console.error("Error in getInventoryDetail:", error);
+    next(error);
+  }
+};
+
+
 /* ***************************
  *  Export controller functions
  * ************************** */

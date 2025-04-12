@@ -1,9 +1,28 @@
 const utilities = require('../utilities');
 const accountModel = require('../models/account-model'); // Import the account model
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-// ****************************************
-//  Deliver login view
-// ****************************************
+/* ****************************************
+ *  Deliver account management view
+ * ************************************ */
+async function accountManagement(req, res, next) {
+  try {
+    let nav = await utilities.getNav(); // Generate navigation dynamically
+    res.render("account/management", {
+      title: "Account Management",
+      nav,
+      errors: null,
+      flash: req.flash(), // Display any flash messages
+    });
+  } catch (error) {
+    console.error("Error in accountManagement:", error); // Debugging error
+    next(error);
+  }
+}
+
+// Keep existing functions...
+
 async function buildLogin(req, res, next) {
   try {
     const nav = await utilities.getNav(); // Generate navigation dynamically
@@ -18,9 +37,6 @@ async function buildLogin(req, res, next) {
   }
 }
 
-// ****************************************
-//  Deliver registration view
-// ****************************************
 async function buildRegister(req, res, next) {
   try {
     const nav = await utilities.getNav(); // Generate navigation dynamically
@@ -35,15 +51,11 @@ async function buildRegister(req, res, next) {
   }
 }
 
-// ****************************************
-//  Process Registration
-// ****************************************
 async function registerAccount(req, res, next) {
   try {
     const nav = await utilities.getNav();
     const { firstName, lastName, email, password } = req.body; // Extract form data
 
-    // Call the model function to register the account
     const regResult = await accountModel.registerAccount(firstName, lastName, email, password);
     console.log("Registration result:", regResult); // Debugging registration output
 
@@ -71,15 +83,11 @@ async function registerAccount(req, res, next) {
   }
 }
 
-// ****************************************
-//  Process Login
-// ****************************************
 async function processLogin(req, res, next) {
   try {
     const nav = await utilities.getNav();
     const { email, password } = req.body; // Extract login data
 
-    // Verify login credentials via the model
     const user = await accountModel.verifyCredentials(email, password);
     console.log("User data:", user); // Debugging output
 
@@ -100,21 +108,41 @@ async function processLogin(req, res, next) {
   }
 }
 
-// ****************************************
-//  Build dashboard view (optional functionality)
-// ****************************************
-async function buildDashboard(req, res, next) {
-  try {
-    const nav = await utilities.getNav(); // Generate navigation dynamically
-    const user = req.user; // Middleware should populate `req.user` for logged-in users
-    res.render("dashboard", {
-      title: `Welcome, ${user.firstName}`, // Use user data for personalized welcome
+async function accountLogin(req, res) {
+  let nav = await utilities.getNav();
+  const { account_email, account_password } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  if (!accountData) {
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(400).render("account/login", {
+      title: "Login",
       nav,
-      user, // Pass user data to the view
+      errors: null,
+      account_email,
     });
+    return;
+  }
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password;
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+      if (process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
+      }
+      return res.redirect("/account/");
+    } else {
+      req.flash("message notice", "Please check your credentials and try again.");
+      res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      });
+    }
   } catch (error) {
-    console.error("Error in buildDashboard:", error); // Debugging error
-    next(error);
+    throw new Error('Access Forbidden');
   }
 }
 
@@ -124,5 +152,6 @@ module.exports = {
   buildRegister,
   registerAccount,
   processLogin,
-  buildDashboard,
+  accountLogin,
+  accountManagement, // Added this new function
 };

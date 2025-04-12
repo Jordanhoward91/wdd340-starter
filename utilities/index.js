@@ -1,4 +1,6 @@
 const invModel = require("../models/inventory-model"); // Import inventory model
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 const Util = {};
 
@@ -125,6 +127,33 @@ function handleErrors(fn) {
   };
 }
 
+
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+ if (req.cookies.jwt) {
+  jwt.verify(
+   req.cookies.jwt,
+   process.env.ACCESS_TOKEN_SECRET,
+   function (err, accountData) {
+    if (err) {
+     req.flash("Please log in")
+     res.clearCookie("jwt")
+     return res.redirect("/account/login")
+    }
+    res.locals.accountData = accountData
+    res.locals.loggedin = 1
+    next()
+   })
+ } else {
+  next()
+ }
+}
+
+
+
 /* ******************************
  * Export utilities
  ****************************** */
@@ -133,4 +162,5 @@ module.exports = {
   buildClassificationGrid: Util.buildClassificationGrid,
   buildClassificationList: Util.buildClassificationList,
   handleErrors, // Exported error-handling utility
+  checkJWTToken: Util.checkJWTToken,
 };
