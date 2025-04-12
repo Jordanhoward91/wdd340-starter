@@ -1,6 +1,7 @@
 const utilities = require('../utilities');
 const accountModel = require('../models/account-model'); // Import the account model
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs"); // Required for password hashing
 require("dotenv").config();
 
 /* ****************************************
@@ -21,8 +22,9 @@ async function accountManagement(req, res, next) {
   }
 }
 
-// Keep existing functions...
-
+/* ****************************************
+ *  Build Login View
+ * ************************************ */
 async function buildLogin(req, res, next) {
   try {
     const nav = await utilities.getNav(); // Generate navigation dynamically
@@ -37,6 +39,9 @@ async function buildLogin(req, res, next) {
   }
 }
 
+/* ****************************************
+ *  Build Register View
+ * ************************************ */
 async function buildRegister(req, res, next) {
   try {
     const nav = await utilities.getNav(); // Generate navigation dynamically
@@ -51,6 +56,9 @@ async function buildRegister(req, res, next) {
   }
 }
 
+/* ****************************************
+ *  Register New Account
+ * ************************************ */
 async function registerAccount(req, res, next) {
   try {
     const nav = await utilities.getNav();
@@ -83,35 +91,47 @@ async function registerAccount(req, res, next) {
   }
 }
 
+/* ****************************************
+ *  Process Login
+ * ************************************ */
 async function processLogin(req, res, next) {
   try {
+    console.log("Request Body:", req.body); // Log the submitted form data
+
     const nav = await utilities.getNav();
     const { email, password } = req.body; // Extract login data
 
     const user = await accountModel.verifyCredentials(email, password);
-    console.log("User data:", user); // Debugging output
+    console.log("User Data:", user); // Debugging output
 
     if (user) {
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+      res.cookie("jwt", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", maxAge: 3600000 });
       req.flash("notice", `Welcome back, ${user.firstName}!`);
-      res.redirect("/inv"); // Redirect to inventory management
+      res.redirect("/");
     } else {
       req.flash("notice", "Login failed. Invalid credentials.");
       res.status(401).render("account/login", {
         title: "Login",
         nav,
-        messages: req.flash("notice"), // Feedback for failed login
+        messages: req.flash("notice"),
       });
     }
   } catch (error) {
-    console.error("Error in processLogin:", error); // Debugging error
+    console.error("Error in processLogin:", error); // Log any unexpected errors
     next(error);
   }
 }
 
+
+/* ****************************************
+ *  Account Login (Alternative Implementation)
+ * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
+
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.");
     res.status(400).render("account/login", {
@@ -125,15 +145,11 @@ async function accountLogin(req, res) {
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
-      if (process.env.NODE_ENV === 'development') {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
-      }
-      return res.redirect("/account/");
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600000 });
+      res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600000 });
+      res.redirect("/"); // Redirect to home page
     } else {
-      req.flash("message notice", "Please check your credentials and try again.");
+      req.flash("notice", "Please check your credentials and try again.");
       res.status(400).render("account/login", {
         title: "Login",
         nav,
@@ -142,7 +158,8 @@ async function accountLogin(req, res) {
       });
     }
   } catch (error) {
-    throw new Error('Access Forbidden');
+    console.error("Error in accountLogin:", error);
+    next(error);
   }
 }
 
@@ -153,5 +170,5 @@ module.exports = {
   registerAccount,
   processLogin,
   accountLogin,
-  accountManagement, // Added this new function
+  accountManagement,
 };

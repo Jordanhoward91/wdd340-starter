@@ -23,10 +23,11 @@ router.post('/register', utilities.handleErrors(accountsController.registerAccou
 // Process the login request
 router.post(
   '/login',
-  regValidate.loginRules(),
-  regValidate.checkLoginData,
-  utilities.handleErrors(accountsController.accountLogin)
+  regValidate.loginRules(), // Validation rules
+  regValidate.checkLoginData, // Validation middleware
+  accountsController.processLogin // Controller function
 );
+
 
 // Export the router for use in other files
 module.exports = router;
